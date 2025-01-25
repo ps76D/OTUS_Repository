@@ -890,11 +890,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: 8d4d2546-4b30-4e1e-a049-537ce2c2038f
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: OTUS_Repository.git
+  organizationId: denis-gustov
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
