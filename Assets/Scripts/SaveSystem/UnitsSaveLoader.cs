@@ -52,78 +52,25 @@ namespace SaveSystem
 
             foreach (var unitData in dataArray)
             {
-                var position = new Vector3(unitData._xPosition,unitData._yPosition,unitData._zPosition);
-                var rotation = new Vector3(unitData._xRotation,unitData._yRotation,unitData._zRotation);
+                var position = new Vector3(unitData._xPosition, unitData._yPosition, unitData._zPosition);
+                var rotation = new Vector3(unitData._xRotation, unitData._yRotation, unitData._zRotation);
 
-                Unit unit = enumerable.FirstOrDefault(u =>  u != null && u.name == unitData._name);
-                
+                Unit unit = enumerable.FirstOrDefault(u => u != null && u.name == unitData._name);
+
                 if (unit == null)
                 {
                     var unitPrefab = _unitsPrefabs.Units.FirstOrDefault(prefab => prefab.name == unitData._type);
-                    
+
                     var newUnit = service.SpawnUnit(unitPrefab, position, Quaternion.Euler(rotation));
-                    
+
                     unit = newUnit;
                 }
-                
+
                 unit.HitPoints = unitData._hitPoints;
                 unit.gameObject.transform.position = position;
                 unit.gameObject.transform.rotation = Quaternion.Euler(rotation);
-                
-                /*if (unit != null)
-                {
-
-                
-                    unit.HitPoints = unitData._hitPoints;
-                    unit.gameObject.transform.position = position;
-                    unit.gameObject.transform.rotation = Quaternion.Euler(rotation);
-                }
-                else
-                {
-                    var unitPrefab = _unitsPrefabs.Units.First(prefab => prefab.gameObject.name == unitData._type);
-                    
-                    var newUnit = service.SpawnUnit(unitPrefab, position, Quaternion.Euler(rotation));
-                    
-                    unit = newUnit;
-                    
-                    unit.HitPoints = unitData._hitPoints;
-                    unit.gameObject.transform.position = position;
-                    unit.gameObject.transform.rotation = Quaternion.Euler(rotation);
-                }*/
-
             }
-            
-            /*foreach (var unit in enumerable)
-            {
-                var data = dataArray.FirstOrDefault(d => d._name == unit.gameObject.name);
-                
-                var position = new Vector3(data._xPosition,data._yPosition,data._zPosition);
-                var rotation = new Vector3(data._xRotation,data._yRotation,data._zRotation);
-                
-                unit.HitPoints = data._hitPoints;
-                unit.gameObject.transform.position = position;
-                unit.gameObject.transform.rotation = Quaternion.Euler(rotation);*/
-                
-                /*if (unit.gameObject == null)
-                {
-                    var unitPrefab = _unitsPrefabs.Units.First(prefab => prefab.gameObject.name == unit.Type);
 
-                    var newUnit = service.SpawnUnit(unitPrefab, position, Quaternion.Euler(rotation));
-                    
-                    unit = newUnit;
-                    newUnit.HitPoints = data._hitPoints;
-                }
-                else
-                {
-                    unit.HitPoints = data._hitPoints;
-                    unit.gameObject.transform.position = position;
-                    unit.gameObject.transform.rotation = Quaternion.Euler(rotation);
-                }*/
-
-                
-
-            /*}*/
-            
             service.SetupUnits(enumerable);
         }
     }
