@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using SaveSystem;
+using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI
 {
@@ -7,7 +9,16 @@ namespace UI
     {
         [SerializeField] private Button _saveButton;
         [SerializeField] private Button _loadButton;
+        
+        [Inject]
+        [SerializeField] private SaveLoadManager _saveLoadManager;
 
+        /*[Inject]
+        public void Construct(SaveLoadManager saveLoadManager)
+        {
+            _saveLoadManager = saveLoadManager;
+        }*/
+        
         private void Start()
         {
             _saveButton.onClick.AddListener(SaveGame);
@@ -16,12 +27,12 @@ namespace UI
 
         private void LoadGame()
         {
-            
+            _saveLoadManager.LoadGame();
         }
 
         private void SaveGame()
         {
-            
+            _saveLoadManager.SaveGame();
         }
 
         private void OnDisable()
