@@ -3,6 +3,7 @@ using System.Linq;
 using GameEngine;
 using PlayerProfileSystem;
 using SaveSystem;
+using SaveSystem.Data;
 using UI;
 using UnityEngine;
 using Zenject;
@@ -11,6 +12,7 @@ namespace DI
 {
     public class GameInstaller : MonoInstaller
     {
+        [SerializeField] private UnitsPrefabs _unitsPrefabs;
         [SerializeField] private SaveLoadManager _saveLoadManager;
         [SerializeField] private UIManager _uiManager;
 
@@ -19,6 +21,8 @@ namespace DI
         
         public override void InstallBindings()
         {
+            Container.Bind<UnitsPrefabs>().FromInstance(_unitsPrefabs).AsCached().NonLazy();
+            
             _resources = FindObjectsOfType<MonoBehaviour>(true).OfType<Resource>().ToList();
             Container.Bind<IEnumerable<Resource>>().FromInstance(_resources).AsCached().NonLazy();
             Container.Bind<ResourceService>().FromNew().AsCached().NonLazy();
@@ -28,6 +32,7 @@ namespace DI
             Container.Bind<UnitManager>().FromNew().AsCached().NonLazy();
 
             Container.Bind<ISaveLoader>().To<ResourcesSaveLoader>().AsCached().NonLazy();
+            Container.Bind<ISaveLoader>().To<UnitsSaveLoader>().AsCached().NonLazy();
 
             Container.Bind<PlayerProfile>().ToSelf().AsSingle().NonLazy();
 

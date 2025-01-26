@@ -671,6 +671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115fa2c8356dc044ea86f928edcade29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unitsPrefabs: {fileID: 11400000, guid: 13bc87e76e74f6e4bb4798a625fa1a61, type: 2}
   _saveLoadManager: {fileID: 1251582082}
   _uiManager: {fileID: 1305732736}
 --- !u!4 &634557264
@@ -1284,7 +1285,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263304700}
-  - component: {fileID: 1263304701}
   m_Layer: 0
   m_Name: <Units>
   m_TagString: Untagged
@@ -1319,18 +1319,6 @@ Transform:
   m_Father: {fileID: 800337253}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1263304701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263304699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dd0d6009b972c84893926c8ae7ef112, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1298357891
 PrefabInstance:
   m_ObjectHideFlags: 0
