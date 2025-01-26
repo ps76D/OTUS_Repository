@@ -12,12 +12,6 @@ namespace UI
         
         [Inject]
         [SerializeField] private SaveLoadManager _saveLoadManager;
-
-        /*[Inject]
-        public void Construct(SaveLoadManager saveLoadManager)
-        {
-            _saveLoadManager = saveLoadManager;
-        }*/
         
         private void Start()
         {
@@ -40,7 +34,5 @@ namespace UI
             _saveButton.onClick.RemoveListener(SaveGame);
             _loadButton.onClick.RemoveListener(LoadGame);
         }
-
-
     }
 }

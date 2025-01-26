@@ -1,10 +1,8 @@
-﻿using PlayerProfileSystem;
-
-namespace SaveSystem
+﻿namespace SaveSystem
 {
     public interface ISaveLoader
     {
-        void SaveGame(PlayerProfile playerProfile, IGameRepository gameRepository);
-        void LoadGame(PlayerProfile playerProfile, IGameRepository gameRepository);
+        void SaveGame(SaveLoadManager saveLoadManager, IGameRepository gameRepository);
+        void LoadGame(SaveLoadManager saveLoadManager, IGameRepository gameRepository);
     }
 }

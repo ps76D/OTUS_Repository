@@ -1,24 +1,22 @@
-﻿using System;
-using PlayerProfileSystem;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SaveSystem
 {
     public abstract class SaveLoader<TService, TData> : ISaveLoader
     {
 
-        public void SaveGame(PlayerProfile playerProfile, IGameRepository gameRepository)
+        public void SaveGame(SaveLoadManager saveLoadManager, IGameRepository gameRepository)
         {
-            TService service = playerProfile.GetService<TService>();
+            TService service = saveLoadManager.GetService<TService>();
             TData data = ConvertToData(service);
             gameRepository.SetData(data);
 
             Debug.Log($"Saved data {data.GetType().Name}");
         }
 
-        public void LoadGame(PlayerProfile playerProfile, IGameRepository gameRepository)
+        public void LoadGame(SaveLoadManager saveLoadManager, IGameRepository gameRepository)
         {
-            TService service = playerProfile.GetService<TService>();
+            TService service = saveLoadManager.GetService<TService>();
             
             if (gameRepository.TryGetData(out TData data))
             {

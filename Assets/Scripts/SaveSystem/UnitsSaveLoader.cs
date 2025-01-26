@@ -59,11 +59,7 @@ namespace SaveSystem
 
                 if (unit == null)
                 {
-                    var unitPrefab = _unitsPrefabs.Units.FirstOrDefault(prefab => prefab.name == unitData._type);
-
-                    var newUnit = service.SpawnUnit(unitPrefab, position, Quaternion.Euler(rotation));
-
-                    unit = newUnit;
+                    SpawnSavedUnits(service, out unit, unitData, position, rotation);
                 }
 
                 unit.HitPoints = unitData._hitPoints;
@@ -72,6 +68,29 @@ namespace SaveSystem
             }
 
             service.SetupUnits(enumerable);
+
+            DeleteUnsavedUnits(service, enumerable, dataArray);
+        }
+
+        private void SpawnSavedUnits(UnitManager service, out Unit unit, UnitData unitData, Vector3 position, Vector3 rotation)
+        {
+            var unitPrefab = _unitsPrefabs.Units.FirstOrDefault(prefab => prefab.name == unitData._type);
+
+            var newUnit = service.SpawnUnit(unitPrefab, position, Quaternion.Euler(rotation));
+
+            unit = newUnit;
+        }
+        
+        private void DeleteUnsavedUnits(UnitManager service, Unit[] enumerable, UnitData[] dataArray)
+        {
+            var difference = enumerable
+                .Where(unit => dataArray.All(unitData => unitData._name != unit.name))
+                .ToArray();
+            
+            foreach (var unit in difference)
+            {
+                service.DestroyUnit(unit);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using PlayerProfileSystem;
-using Sirenix.OdinInspector;
+﻿using System;
+using System.Collections.Generic;
+using PlayerProfileSystem;
 using UnityEngine;
 using Zenject;
-
 
 namespace SaveSystem
 {
@@ -12,8 +12,9 @@ namespace SaveSystem
         
         private GameRepository _gameRepository;
         
-        [ShowInInspector]
         private ISaveLoader[] _saveLoaders;
+        
+        private readonly List<object> _services = new ();
 
         [Inject]
         public void Construct(PlayerProfile playerProfile, GameRepository gameRepository, ISaveLoader[] saveLoaders)
@@ -23,13 +24,16 @@ namespace SaveSystem
             _gameRepository = gameRepository;
             
             _playerProfile.Initialize();
+            
+            _services.Add(playerProfile.ResourceService);
+            _services.Add(playerProfile.UnitManager);
         }
 
         public void SaveGame()
         {
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.SaveGame(_playerProfile, _gameRepository);
+                saveLoader.SaveGame(this, _gameRepository);
             }
             
             _gameRepository.SaveState();
@@ -41,8 +45,21 @@ namespace SaveSystem
             
             foreach (var saveLoader in _saveLoaders)
             {
-                saveLoader.LoadGame(_playerProfile, _gameRepository);
+                saveLoader.LoadGame(this, _gameRepository);
             }
+        }
+        
+        public T GetService<T>()
+        {
+            for (int i = 0, count = _services.Count; i < count; i++)
+            {
+                if (_services[i] is T result)
+                {
+                    return result;
+                }
+            }
+            
+            throw new Exception($"Service {typeof(T).Name} is not found!");
         }
     }
 }
