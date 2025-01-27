@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using AesEncrypt;
 using Newtonsoft.Json;
 using UnityEngine;
+using Zenject;
 
 namespace SaveSystem
 {
     public class GameRepository : IGameRepository
     {
+        [Inject]
+        private AesEncryptComponent _encryptComponent;
+        
         private const string GAME_STATE_KEY = "GameStateKey"; 
         
         private Dictionary<string, string> _gameState = new ();
@@ -38,14 +43,20 @@ namespace SaveSystem
         {
             var gameStateJson = JsonConvert.SerializeObject(_gameState);
             
-            /*var saveName = DateTime.Now.ToString("yy.MM.dd  HH_mm");
-                
-            var savePath = Path.Combine(Application.persistentDataPath, saveName + ".json");
+            byte[] encryptedData = _encryptComponent.Encrypt(gameStateJson);
             
-            //Способ сохранения
+            EncryptedSaveStruct encryptedSaveStruct = new()
+            {
+                Data = encryptedData
+            };
+            
+            string encryptedJson = JsonConvert.SerializeObject(encryptedSaveStruct);
+            
+            /*var savePath = Path.Combine(Application.persistentDataPath, "save" + ".json");
+            
             try
             {
-                File.WriteAllText(savePath, contents: gameStateJson);
+                File.WriteAllText(savePath, contents: encryptedJson);
                 Debug.Log(message: "Successfully Saved");
             }
             catch (Exception ex)
@@ -53,14 +64,19 @@ namespace SaveSystem
                 Debug.Log(message: "Save Failed"+ex);
             }*/
             
-            PlayerPrefs.SetString(GAME_STATE_KEY, gameStateJson);
+            PlayerPrefs.SetString(GAME_STATE_KEY, encryptedJson);
         }
 
         public void LoadState()
         {
             if (PlayerPrefs.HasKey(GAME_STATE_KEY))
             {
-                var gameStateJson = PlayerPrefs.GetString(GAME_STATE_KEY);
+                var encryptedJson = PlayerPrefs.GetString(GAME_STATE_KEY);
+                
+                byte[] encryptedData = JsonConvert.DeserializeObject<EncryptedSaveStruct>(encryptedJson).Data;
+                
+                var gameStateJson = _encryptComponent.Decrypt(encryptedData);
+                
                 _gameState = JsonConvert.DeserializeObject<Dictionary<string, string>>(gameStateJson);
                 Debug.Log("Game State Loaded");
             }
@@ -68,6 +84,30 @@ namespace SaveSystem
             {
                 Debug.Log("No Game State Loaded");
             }
+            
+            /*var savePath = Path.Combine(Application.persistentDataPath, "save");
+            
+            if (!File.Exists(savePath))
+            {
+                Debug.Log(message: "Save File Not Found");
+                return;
+            }
+
+            try
+            {
+                string encryptedJson = File.ReadAllText(savePath);
+                
+                byte[] encryptedData = JsonConvert.DeserializeObject<EncryptedSaveStruct>(encryptedJson).Data;
+                
+                var gameStateJson = _encryptComponent.Decrypt(encryptedData);
+                
+                _gameState = JsonConvert.DeserializeObject<Dictionary<string, string>>(gameStateJson);
+            }
+
+            catch (Exception)
+            {
+                Debug.Log(message: "Save Data Not Read");
+            }*/
         }
     }
 }

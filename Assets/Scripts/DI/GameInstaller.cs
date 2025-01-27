@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AesEncrypt;
 using GameEngine;
 using PlayerProfileSystem;
 using SaveSystem;
@@ -38,11 +39,13 @@ namespace DI
 
             Container.Bind<ProfileService>().ToSelf().AsSingle().NonLazy();
 
+            Container.Bind<AesEncryptComponent>().FromNew().AsSingle().NonLazy();
             Container.Bind<GameRepository>().FromNew().AsSingle().NonLazy();
 
             Container.Bind<SaveLoadManager>().FromInstance(_saveLoadManager).AsCached().NonLazy();
-            
+
             Container.Bind<UIManager>().FromInstance(_uiManager).AsCached().NonLazy();
+
         }
     }
 }
